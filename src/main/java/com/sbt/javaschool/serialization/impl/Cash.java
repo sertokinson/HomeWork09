@@ -9,4 +9,5 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Cash {
     int countArguments() default 2;
+    CashType cashType() default CashType.MEMORY;
 }

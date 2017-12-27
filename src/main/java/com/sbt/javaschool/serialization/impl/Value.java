@@ -1,11 +1,16 @@
 package com.sbt.javaschool.serialization.impl;
 
+import java.io.Serializable;
 import java.util.Objects;
 
-public class Value {
+public class Value implements Serializable {
+    private static final long serialVersionUID = -4631760489993790855L;
     String name;
     Integer value;
     Double result;
+
+    public Value() {
+    }
 
     public Value(String name, Integer value, Double result) {
         this.name = name;
@@ -35,5 +40,14 @@ public class Value {
     public int hashCode() {
 
         return Objects.hash(name, value);
+    }
+
+    @Override
+    public String toString() {
+        return "Value{" +
+                "name='" + name + '\'' +
+                ", value=" + value +
+                ", result=" + result +
+                '}';
     }
 }

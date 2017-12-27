@@ -11,7 +11,7 @@ public class Main {
     public static void run(Service service){
         double r1 = service.doHardWork("work1", 10);
         double r2 = service.doHardWork("work1", 5);
-        double r3 = service.doHardWork("work1", 10);
+        double r3 = service.doHardWork("work2", 10);
 
     }
 }
