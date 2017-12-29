@@ -23,6 +23,11 @@ public class Value implements Serializable {
         this.value = value;
     }
 
+    public Value(String name, Double result) {
+        this.name = name;
+        this.result = result;
+    }
+
     public Value(String name) {
         this.name = name;
     }

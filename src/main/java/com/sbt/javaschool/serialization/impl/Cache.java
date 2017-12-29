@@ -7,7 +7,7 @@ import java.lang.annotation.Target;
 
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Cash {
+public @interface Cache {
     int countArguments() default 2;
-    CashType cashType() default CashType.MEMORY;
+    CacheType cashType() default CacheType.MEMORY;
 }
