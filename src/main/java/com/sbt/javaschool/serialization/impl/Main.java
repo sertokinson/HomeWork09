@@ -10,14 +10,15 @@ public class Main {
         ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("context.xml");
         Main.run(context.getBean(Service.class));
     }
-    public static void run(Service service){
+    public static void run(Service service) {
         System.out.println(service.doHardWork("work1", 10));
         System.out.println(service.doHardWork("work1", 5));
         System.out.println(service.doHardWork("work2", 10));
         System.out.println(service.doHardWork("work3"));
-        System.out.println(service.doHardWork("work3"));
+       /* System.out.println(service.doHardWork("work3"));
         System.out.println(service.doHardWork("work3"));
         System.out.println(service.doHardWork("work2"));
         System.out.println(service.doHardWork("work3"));
+    */
     }
 }

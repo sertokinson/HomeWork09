@@ -8,7 +8,7 @@ import java.util.List;
 public class ServiceImpl implements Service {
     private List<String> list = new ArrayList<>();
 
-    @Cache(countArguments = 1,cashType = CacheType.FILE)
+    @Cache(cashType = CacheType.FILE)
     public double doHardWork(String name, Integer value) {
         return (double) value;
     }

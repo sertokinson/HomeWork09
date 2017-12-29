@@ -13,24 +13,31 @@ public class CacheAnnotation {
     public static Object cashingInMemory(Object bean, Method method, Object[] args, List<Value> list, Cache annotation) throws InvocationTargetException, IllegalAccessException {
         argument = annotation.countArguments();
         isList = method.getReturnType() == List.class;
-        if (isList) {
-            argument = 1;
-        }
+        List<String> cacheList = new ArrayList<>();
         for (Value value : list) {
-            switch (argument) {
-                case 2:
-                    if (value.equals(new Value((String) args[0], (Integer) args[1]))) {
-                        System.out.println("Взяли из памяти:");
-                        return value.result;
-                    }
-                    break;
-                case 1:
-                    if (value.name.equals(args[0])) {
-                        System.out.println("Взяли из памяти:");
-                        if (isList)
-                            return list;
-                        return value.result;
-                    }
+            if (value.result == null)
+                cacheList.add(value.name);
+            if (!isList)
+                switch (argument) {
+                    case 2:
+                        if (value.equals(new Value((String) args[0], (Integer) args[1]))) {
+                            System.out.println("Взяли из памяти:");
+                            return value.result;
+                        }
+                        break;
+                    case 1:
+                        if (value.name.equals(args[0])) {
+                            System.out.println("Взяли из памяти:");
+                            if (isList)
+                                return cacheList;
+                            return value.result;
+                        }
+                }
+        }
+        for (String s : cacheList) {
+            if (s.equals(args[0])) {
+                System.out.println("Взяли из памяти list:");
+                return cacheList;
             }
         }
         Object result = method.invoke(bean, args);
@@ -46,28 +53,26 @@ public class CacheAnnotation {
     }
 
     public static Object cashingInFile(Object bean, Method method, Object[] args, Cache annotation, ObjectOutputStream oos) throws IOException, ClassNotFoundException, InvocationTargetException, IllegalAccessException {
+        List<String> list = new ArrayList<>();
+        isList = method.getReturnType() == List.class;
         FileInputStream fis = new FileInputStream(CacheHandlerBeanPostProcessor.FILE_NAME);
         ObjectInputStream ois = new ObjectInputStream(fis);
         argument = annotation.countArguments();
-        isList = method.getReturnType() == List.class;
-        List<String> list = new ArrayList<>();
-        if (isList) {
-            argument = 1;
-        }
         while (fis.available() > 0) {
             Value value = (Value) ois.readObject();
-            list.add(value.name);
+            if (value.result == null)
+                list.add(value.name);
             if (!isList)
                 switch (argument) {
                     case 2:
                         if (value.equals(new Value((String) args[0], (Integer) args[1]))) {
-                            System.out.println("Взяли из кеша файла:");
+                            System.out.println("Взяли из файла:");
                             ois.close();
                             return value.result;
                         }
                     case 1:
                         if (value.name.equals(args[0])) {
-                            System.out.println("Взяли из кеша файла:");
+                            System.out.println("Взяли из файла:");
                             ois.close();
                             return value.result;
                         }
@@ -75,11 +80,11 @@ public class CacheAnnotation {
         }
         for (String s : list) {
             if (s.equals(args[0])) {
-                System.out.println("Взяли из кеша файла list:");
+                System.out.println("Взяли из файла list:");
                 return list;
             }
         }
-        System.out.println("Записали в кеш файла:");
+        System.out.println("Записали в файл:");
         Object result = method.invoke(bean, args);
         if (isList) {
             list = (List) result;
